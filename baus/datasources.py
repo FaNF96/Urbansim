@@ -133,8 +133,8 @@ def inclusionary_housing_settings(policy, scenario):
     d = {}
     if (scenario in policy["inclusionary_d_b_enable"]):
         for item in s:
-            # this is a list of Blueprint strategy geographies - represented
-            # by pba50chcat - with an inclusionary rate that is the same
+            # this is a list of draft blueprint strategy geographies (represented
+            # by pba50chcat) with an inclusionary rate that is the same
             # for all the pba50chcats in the list
             print("Setting inclusionary rates for geographies %d pba50chcat \
                   to %.2f" % (len(item["values"]), item["amount"]))
@@ -143,6 +143,18 @@ def inclusionary_housing_settings(policy, scenario):
             # of pba50chcat names to rates
             for pba50chcat in item["values"]:
                 d[pba50chcat] = item["amount"]
+    elif (scenario in policy["inclusionary_fb_enable"]):
+        for item in s:
+            # this is a list of final blueprint strategy geographies (represented
+            # by fbpchcat) with an inclusionary rate that is the same
+            # for all the fbpchcat in the list
+            print("Setting inclusionary rates for geographies %d fbpchcat \
+                  to %.2f" % (len(item["values"]), item["amount"]))
+            # this is a list of inclusionary rates and the fbpchcat
+            # geographies they apply to - need to turn it in a map
+            # of fbpchcat names to rates
+            for fbpchcat in item["values"]:
+                d[fbpchcat] = item["amount"]
     else:
         for item in s:
             # this is a list of cities with an inclusionary rate that is the
@@ -456,7 +468,7 @@ def zoning_scenario(parcels_geography, scenario, policy, mapping):
     add_drop_helper("drop_bldg", 0)
 
     if scenario in policy['geographies_fb_enable']:
-        join_col = 'fbpzoningm'
+        join_col = 'fbpzoningmodcat'
     elif scenario in policy['geographies_db_enable']:
         join_col = 'pba50zoningmodcat'
     elif 'zoninghzcat' in scenario_zoning.columns:
@@ -504,7 +516,7 @@ def parcel_rejections():
 @orca.table(cache=True)
 def parcels_geography(parcels, scenario, settings, policy):
     df = pd.read_csv(
-        os.path.join(misc.data_dir(), "2020_09_21_parcels_geography.csv"),
+        os.path.join(misc.data_dir(), "2020_10_27_parcels_geography.csv"),
         index_col="geom_id")
     df = geom_id_to_parcel_id(df, parcels)
 
@@ -682,7 +694,7 @@ def get_dev_projects_table(scenario, parcels):
     # requires the user has MTC's urban_data_internal
     # repository alongside bayarea_urbansim
     urban_data_repo = ("../urban_data_internal/development_projects/")
-    current_dev_proj = ("2020_1001_0932_development_projects.csv")
+    current_dev_proj = ("2020_1020_1527_development_projects.csv")
     orca.add_injectable("dev_proj_file", current_dev_proj)
     df = pd.read_csv(os.path.join(urban_data_repo, current_dev_proj))
     df = reprocess_dev_projects(df)
@@ -734,6 +746,8 @@ def development_projects(parcels, mapping, scenario):
     df["non_residential_sqft"] = df.non_residential_sqft.fillna(0)
     df["residential_units"] = df.residential_units.fillna(0).astype("int")
     df["preserved_units"] = 0.0
+    df["inclusionary_units"] = 0.0
+    df["subsidized_units"] = 0.0
 
     df["building_type"] = df.building_type.replace("HP", "OF")
     df["building_type"] = df.building_type.replace("GV", "OF")
