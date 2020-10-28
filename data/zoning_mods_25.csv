@@ -1,4 +1,4 @@
-fbpzoningm,modcat_id,FREQUENCY,SUM_ACRES,manual_county,zone,juris,gg_id,tra_id,sesit_id,ppa_id,exp2020_id,exsfd_id,add_bldg,drop_bldg,dua_up,far_up,dua_down,far_down,subsidy,notes,res_rent_cat,exp_on
+fbpzoningmodcat,modcat_id,FREQUENCY,SUM_ACRES,manual_county,zone,juris,gg_id,tra_id,sesit_id,ppa_id,exp2020_id,exsfd_id,add_bldg,drop_bldg,dua_up,far_up,dua_down,far_down,subsidy,notes,res_rent_cat,exp_on
 alamedaGGNADISNAinNA,1,17,2.579486268,1,963,alameda,GG,NA,DIS,NA,in,NA,,,,,,,,,,
 alamedaGGNADISNAinsfd,2,234,27.30474532,1,963,alameda,GG,NA,DIS,NA,in,sfd,,,,,,,,,,
 alamedaGGNAHRADISNAinNA,3,77,35.7035548,1,958,alameda,GG,NA,HRADIS,NA,in,NA,,,,,,,,,,
