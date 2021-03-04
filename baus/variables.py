@@ -375,11 +375,33 @@ def vmt_res_fees(parcels, policy):
 
 # commercial fees
 @orca.column('parcels', cache=True)
-def vmt_com_fees(parcels, policy):
+def vmt_com_fees(parcels, policy, scenario):
     vmt_settings = policy["acct_settings"]["vmt_settings"]
-    return parcels.vmt_nonres_cat.map(
-        vmt_settings["com_for_res_fee_amounts"]) + \
-        parcels.vmt_nonres_cat.map(vmt_settings["com_for_com_fee_amounts"])
+
+    # first, compute com_for_res fees
+    if scenario in vmt_settings["alternate_geography_scenarios"]:
+        parcels.com_for_res_fees = parcels.vmt_nonres_cat.map(
+            vmt_settings["alternate_com_for_res_fee_amounts"])
+    else:
+        parcels.com_for_res_fees = parcels.vmt_nonres_cat.map(
+            vmt_settings["com_for_res_fee_amounts"])
+
+    # second, compute com_for_com fees
+    if scenario in vmt_settings["alternate_geography_scenarios"]:
+        parcels.com_for_com_fees = parcels.vmt_nonres_cat.map(
+            vmt_settings["alternate_com_for_com_fee_amounts"])
+    elif scenario in vmt_settings["db_geography_scenarios"]:
+        parcels.com_for_com_fees = parcels.vmt_nonres_cat.map(
+            vmt_settings["db_com_for_com_fee_amounts"])
+    elif scenario in vmt_settings["eir_geography_scenarios"]:
+        parcels.com_for_com_fees = parcels.vmt_nonres_cat.map(
+            vmt_settings["eir_com_for_com_fee_amounts"])
+    else:
+        parcels.com_for_com_fees = parcels.vmt_nonres_cat.map(
+            vmt_settings["com_for_com_fee_amounts"])        
+
+    # lastly, add them up
+    return parcels.com_for_res_fees + parcels.com_for_com_fees
 
 
 # compute the fees per unit for each parcel
