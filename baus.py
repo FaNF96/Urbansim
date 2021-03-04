@@ -251,7 +251,8 @@ def get_simulation_models(SCENARIO):
     vmt_settings = \
         orca.get_injectable("policy")["acct_settings"]["vmt_settings"]
     if SCENARIO in vmt_settings["com_for_com_scenarios"] and \
-            SCENARIO not in vmt_settings["db_geography_scenarios"]:
+            SCENARIO not in vmt_settings["db_geography_scenarios"] and \
+            SCENARIO not in vmt_settings["eir_geography_scenarios"]:
         models.insert(models.index("office_developer"),
                       "subsidized_office_developer_vmt")
 
