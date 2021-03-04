@@ -571,6 +571,12 @@ def calculate_vmt_fees(policy, year, buildings, vmt_fee_categories, coffer,
                 df.loc[df["county3"] == county3, "com_for_com_fees"] = \
                     df.vmt_nonres_cat.\
                     map(vmt_settings["db_com_for_com_fee_amounts"][county])
+        
+        # assign fees for PBA50 EIR scenarios
+        if scenario in vmt_settings["eir_geography_scenarios"]:
+            df["com_for_com_fees"] = df.vmt_nonres_cat.map(
+                vmt_settings["eir_com_for_com_fee_amounts"])
+
         # assign fees for Horizon scenarios
         if scenario in vmt_settings["alternate_geography_scenarios"]:
             df["com_for_com_fees"] = df.vmt_nonres_cat.map(

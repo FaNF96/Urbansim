@@ -339,6 +339,10 @@ def config(policy, inputs, run_number, scenario, parcels,
                      (policy_loc["db_geography_scenarios"]):
         write("VMT fees: com_for_com is activated but without subsidizing")
         write("VMT fees: com_for_com is using Draft Blueprint fee amounts")
+    elif scenario in (policy_loc["com_for_com_scenarios"]) and scenario in \
+                     (policy_loc["eir_geography_scenarios"]):
+        write("VMT fees: com_for_com is activated but without subsidizing")
+        write("VMT fees: com_for_com is using EIR Alt1 fee amounts")
     elif scenario in (policy_loc["com_for_com_scenarios"]):
         write("VMT fees: com_for_com is activated with pda_id")
         write("VMT fees: com_for_com is using default fee amounts")
